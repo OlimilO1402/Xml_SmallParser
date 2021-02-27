@@ -1,0 +1,131 @@
+beim Programmieren unter VB6 mit Klassen und Interfaces 
+kann einem schon mal die lapidare Fehlermeldung
+unerwarteter Fehler: 32809 begegnen.
+Bei mir warens wahrscheinlich ein paar mal falsche ByVal und ByRef
+
+unter den MSDN findet man dazu:
+
+Suche nach "Error 32809"
+INTRODUCTION
+If you intend for your COM objects to be consumed by a Microsoft Visual Basic application, 
+your COM objects must implement the ISupportErrorInfo interface. However, to make sure 
+that Visual Basic translates your returned HRESULT values correctly, you must not set the 
+bstrDescription parameter to any value except NULL. 
+
+MORE INFORMATION
+The only method that the ISupportErrorInfo interface contains is the InterfaceSupportsErrorInfo() 
+method. When InterfaceSupportsErrorInfo() is called, InterfaceSupportsErrorInfo() indicates 
+whether it supports rich error information.
+
+Note When InterfaceSupportsErrorInfo() is called, it returns "S_OK" if it supports rich error 
+information. 
+
+The Visual Basic runtime uses the ISupportErrorInfo interface to determine whether an object 
+supports the rich error mechanism. If the object supports the rich error mechanism, a call is 
+made to the GetErrorInfo method to retrieve the available error information. The runtime then 
+determines whether bstrDescription has a value other than NULL. If the runtime finds a value 
+other than NULL, Visual Basic cannot translate the HRESULT value to an error number that 
+complies with Visual Basic. By default, the raw HRESULT value is used in this scenario. 
+If the runtime finds a NULL value, HRESULT retrieves an error number and a description that 
+apply to Visual Basic. Visual Basic then uses HRESULT to look up the corresponding Visual 
+Basic error. If a match exists, Visual Basic uses the error number and the description that 
+comply with Visual Basic. 
+
+The following table contains the error values that Visual Basic has translations for:
+
+HRESULT					            VB Friendly #	HR (HEX VALUE)
+// FACILITY_NULL errors				
+E_NOINTERFACE					                430	0x80004002
+E_ABORT						                    287	0x80004004
+
+// FACILITY_DISPATCH - IDispatch errors.		
+DISP_E_UNKNOWNINTERFACE				        438	0x80020001
+DISP_E_MEMBERNOTFOUND				          438	0x80020003
+DISP_E_PARAMNOTFOUND				          448	0x80020004
+DISP_E_TYPEMISMATCH				            13	0x80020005
+DISP_E_UNKNOWNNAME				            438	0x80020006
+DISP_E_NONAMEDARGS				            446	0x80020007
+DISP_E_BADVARTYPE				              458	0x80020008
+DISP_E_OVERFLOW					              6	  0x8002000A
+DISP_E_BADINDEX					              9	  0x8002000B
+DISP_E_UNKNOWNLCID				            447	0x8002000C
+DISP_E_ARRAYISLOCKED				          10	0x8002000D
+DISP_E_BADPARAMCOUNT				          450	0x8002000E
+DISP_E_PARAMNOTOPTIONAL				        449	0x8002000F
+DISP_E_NOTACOLLECTION				          451	0x80020011
+DISP_E_DIVBYZERO				              11	0x80020012
+
+// FACILITY_DISPATCH - Typelib errors.			
+TYPE_E_BUFFERTOOSMALL				        32790	0x80028016
+                                          0x80028017					  
+                                     461	0x80028017
+TYPE_E_INVDATAREAD				          32792	0x80028018
+TYPE_E_UNSUPFORMAT				          32793	0x80028019
+TYPE_E_REGISTRYACCESS				        32796	0x8002801C
+TYPE_E_LIBNOTREGISTERED				      32797	0x8002801D
+TYPE_E_UNDEFINEDTYPE				        32807	0x80028027
+TYPE_E_QUALIFIEDNAMEDISALLOWED			32808	0x80028028
+TYPE_E_INVALIDSTATE				          32809	0x80028029
+TYPE_E_WRONGTYPEKIND				        32810	0x8002802A
+TYPE_E_ELEMENTNOTFOUND				      32811	0x8002802B
+TYPE_E_AMBIGUOUSNAME				        32812	0x8002802C
+TYPE_E_NAMECONFLICT				          32813	0x8002802D
+TYPE_E_UNKNOWNLCID				          32814	0x8002802E
+TYPE_E_DLLFUNCTIONNOTFOUND			      453 0x8002802F
+TYPE_E_BADMODULEKIND				        35005	0x800288BD
+TYPE_E_SIZETOOBIG				            35013	0x800288C5
+TYPE_E_TYPEMISMATCH				   13	0x80028CA0
+TYPE_E_OUTOFBOUNDS				    9	0x80028CA1
+TYPE_E_IOERROR					   57	0x80028CA2
+TYPE_E_CANTCREATETMPFILE			  322	0x80028CA3
+TYPE_E_CANTLOADLIBRARY				   48	0x80029C4A
+TYPE_E_INCONSISTENTPROPFUNCS			40067	0x80029C83
+TYPE_E_CIRCULARTYPE				40068	0x80029C84
+
+// FACILITY_STORAGE errors				
+STG_E_INVALIDFUNCTION				32774	0x80030001
+STG_E_FILENOTFOUND				   53	0x80030002
+STG_E_PATHNOTFOUND				   76	0x80030003
+STG_E_TOOMANYOPENFILES				   67	0x80030004
+STG_E_ACCESSDENIED				   70	0x80030005
+STG_E_INVALIDHANDLE				32772	0x80030006
+STG_E_INSUFFICIENTMEMORY			    7	0x80030008
+STG_E_NOMOREFILES				   67	0x80030012
+STG_E_DISKISWRITEPROTECTED			   70	0x80030013
+STG_E_SEEKERROR					32771	0x80030019
+STG_E_WRITEFAULT				32773	0x8003001D
+STG_E_READFAULT					32772	0x8003001E
+STG_E_SHAREVIOLATION				   75	0x80030020
+STG_E_LOCKVIOLATION				   70	0x80030021
+STG_E_FILEALREADYEXISTS				   58	0x80030050
+STG_E_MEDIUMFULL				   61	0x80030070
+STG_E_INVALIDHEADER				32792	0x800300FB
+STG_E_INVALIDNAME				   53	0x800300FC
+STG_E_UNKNOWN					32792	0x800300FD
+STG_E_UNIMPLEMENTEDFUNCTION			32768	0x800300FE
+STG_E_INUSE					   70	0x80030100
+STG_E_NOTCURRENT				   70	0x80030101
+STG_E_REVERTED					32773	0x80030102
+STG_E_CANTSAVE					   57	0x80030103
+STG_E_OLDFORMAT					32793	0x80030104
+STG_E_OLDDLL					32793	0x80030105
+STG_E_SHAREREQUIRED				32789	0x80030106
+STG_E_NOTFILEBASEDSTORAGE			32793	0x80030107
+STG_E_EXTANTMARSHALLINGS			32793	0x80030108
+
+// FACILITY_ITF errors.				
+CLASS_E_NOTLICENSED				  429	0x80040112
+REGDB_E_CLASSNOTREG				  429	0x80040154
+MK_E_UNAVAILABLE				  429	0x800401E3
+MK_E_INVALIDEXTENSION				  432	0x800401E6
+MK_E_CANTOPENFILE				  432	0x800401EA
+CO_E_CLASSSTRING				  429	0x800401F3
+CO_E_APPNOTFOUND				  429	0x800401F5
+CO_E_APPDIDNTREG				  429	0x800401FE
+E_ACCESSDENIED					   70	0x80070005
+E_OUTOFMEMORY					    7	0x8007000E
+E_INVALIDARG					    5	0x80070057
+RPC_S_SERVER_UNAVAILABLE			  462	0x800706ba
+CO_E_SERVER_EXEC_FAILURE			  429	0x80080005
+0xffffffff					  440		
+
