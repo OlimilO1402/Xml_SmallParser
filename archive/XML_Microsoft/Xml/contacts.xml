@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<contacts>
+  <contact>
+    <name>John Doe</name>
+    <phone>123-456-7890</phone>
+  </contact>
+  <contact>
+    <name>Jane Doe</name>
+    <phone>123-456-7891</phone>
+  </contact>
+</contacts>

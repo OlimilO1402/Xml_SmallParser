@@ -1,0 +1,9 @@
+<?xml version="1.0"?><?xml-stylesheet type='text/xml' href='test.xsl'?><!--sample xml file created using XML DOM object.--><root created="using dom">
+	<node1>some character data</node1>
+	<node2><![CDATA[<some mark-up text>]]></node2>
+	<node3>
+		<subNode1/>
+		<subNode2/>
+		<subNode3/>
+	</node3>
+</root>

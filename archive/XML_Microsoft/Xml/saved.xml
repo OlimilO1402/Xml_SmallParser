@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc title="test">
+	<page num="1">
+		<para title="Saved at last">
+          This XML data is finally saved.
+      </para>
+	</page>
+	<page num="2">
+		<para>
+          This page is intentionally left blank.
+      </para>
+	</page>
+</doc>

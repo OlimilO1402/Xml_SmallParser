@@ -1,13 +1,22 @@
 VERSION 5.00
 Begin VB.Form Form1 
    Caption         =   "Form1"
-   ClientHeight    =   8100
+   ClientHeight    =   8085
    ClientLeft      =   60
    ClientTop       =   450
-   ClientWidth     =   12765
+   ClientWidth     =   12735
+   BeginProperty Font 
+      Name            =   "Segoe UI"
+      Size            =   9.75
+      Charset         =   0
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
    LinkTopic       =   "Form1"
-   ScaleHeight     =   8100
-   ScaleWidth      =   12765
+   ScaleHeight     =   8085
+   ScaleWidth      =   12735
    StartUpPosition =   3  'Windows-Standard
    Begin VB.CommandButton BtnOpenFile 
       Caption         =   "Open xml file"
