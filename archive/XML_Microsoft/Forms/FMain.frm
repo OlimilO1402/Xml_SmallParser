@@ -161,35 +161,6 @@ Option Explicit
 'https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms757026(v=vs.85)
 'Demonstrates how to perform client requests of XML data from a web server.
 '
-'8. Validate XML
-'---------------
-'https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms756009(v=vs.85)
-'Demonstrates how to validate XML documents against an XML schema as well as how to validate document node fragments.
-'
-'8.1 Validate an XML Document Against an XML Schema
-'https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms757071(v=vs.85)
-'Demonstrates how to validate an XML document and/or fragment against an XML schema using Visual Basic.
-'
-'8.1.1
-'Example 1: Validating with noNamespaceSchemaLocation
-'https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms757051(v=vs.85)
-'
-'8.1.2
-'Example 2: Validating with schemaLocation
-'https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms757072(v=vs.85)
-'
-'8.1.3
-'Example 3: Validating with XMLSchemaCache
-'https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms762616(v=vs.85)
-'
-'8.1.4
-'
-'https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms754572(v=vs.85)
-'
-'8.2 Validate an XML Document or Fragment
-'https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms762693(v=vs.85)
-'Demonstrates how to validate an XML document and/or fragment against an XML schema using Visual Basic.
-'
 Private Sub Form_Resize()
     Dim L As Single: L = Text1.Left
     Dim T As Single: T = Text1.Top

@@ -91,6 +91,35 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+'8. Validate XML
+'---------------
+'https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms756009(v=vs.85)
+'Demonstrates how to validate XML documents against an XML schema as well as how to validate document node fragments.
+'
+'8.1 Validate an XML Document Against an XML Schema
+'https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms757071(v=vs.85)
+'Demonstrates how to validate an XML document and/or fragment against an XML schema using Visual Basic.
+'
+'8.1.1
+'Example 1: Validating with noNamespaceSchemaLocation
+'https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms757051(v=vs.85)
+'You can use the xsi:noNamespaceSchemaLocationattribute to reference the XSD schema file from within the XML document.
+'
+'8.1.2
+'Example 2: Validating with schemaLocation
+'https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms757072(v=vs.85)
+'
+'8.1.3
+'Example 3: Validating with XMLSchemaCache
+'https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms762616(v=vs.85)
+'
+'8.1.4
+'Example 4: Validating with an Inline XSD Schema
+'https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms754572(v=vs.85)
+'
+'8.2 Validate an XML Document or Fragment
+'https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms762693(v=vs.85)
+'Demonstrates how to validate an XML document and/or fragment against an XML schema using Visual Basic.
 
 Private Sub Form_Resize()
     Dim L As Single: L = Text1.Left
@@ -100,22 +129,214 @@ Private Sub Form_Resize()
     If W > 0 And H > 0 Then Text1.Move L, T, W, H
 End Sub
 
+' ############################## '        ' ############################## '
 Private Sub BtnTest811_Click()
-    '
+    Dim sPath As String: sPath = App.path & "\Xml\"
+    Dim sOutput As String
+    sOutput = ValidateFile_nn(sPath & "nn-valid.xml")
+    sOutput = sOutput & ValidateFile_nn(sPath & "nn-notValid.xml")
+    Text1.Text = sOutput
 End Sub
+Function ValidateFile_nn(sXmlPathFileName As String) As String
+    Dim s As String
+    ' Create an XML DOMDocument object and set first-level DOM properties.
+    Dim x As DOMDocument60: Set x = MNew.DOMDocument60(False, , True)
+    
+    ' Load and validate the specified file into the DOM.
+    x.Load sXmlPathFileName
+    ' Return validation results in message to the user.
+    If x.parseError.errorCode <> 0 Then
+        s = "Validation failed on: " & sXmlPathFileName & vbCrLf & _
+            "===================== " & vbCrLf & _
+            "Reason: " & x.parseError.Reason & vbCrLf & _
+            "Source: " & x.parseError.srcText & vbCrLf & _
+            "Line  : " & x.parseError.Line & vbCrLf
+    Else
+        s = "Validation succeeded for: " & sXmlPathFileName & vbCrLf & _
+            "========================= " & vbCrLf & _
+            x.xml & vbCrLf
+    End If
+    ValidateFile_nn = s
+End Function
+'Output for 8.1.1:
+'Validation succeeded for nn-valid.xml
+'=====================================
+'<?xml version="1.0"?>
+'<catalog>
+'    <book xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+'xsi:          noNamespaceSchemaLocation = "nn.xsd"
+'          id="bk101">
+'        <author>Gambardella, Matthew</author>
+'        <title>XML Developer's Guide</title>
+'        <genre>Computer</genre>
+'        <price>44.95</price>
+'        <publish_date>2000-10-01</publish_date>
+'        <description>An in-depth look at creating applications
+'         with XML.</description>
+'    </book>
+'</catalog>
+'
+'Validation failed on nn-notValid.xml
+'====================================
+'Reason: Element 'cost' is unexpected according to content model of parent element 'book'.
+'
+'Expecting: price.
+'
+'Source:       <cost>44.95</cost>
+'Line: 8
+'''Explanation: This is because the correct and valid name for the element in use at this location in the XML documents is <price/>, not <cost/>.
 
+' ############################## '        ' ############################## '
 Private Sub BtnTest812_Click()
-    '
+    Dim sPath As String: sPath = App.path & "\Xml\"
+    Dim sOutput As String
+    sOutput = ValidateFile_sl(sPath & "sl-valid.xml")
+    sOutput = sOutput & ValidateFile_sl(sPath & "sl-notValid.xml")
+    Text1.Text = sOutput
 End Sub
+Function ValidateFile_sl(sXmlPathFileName As String) As String
+    Dim s As String
+    ' Create an XML DOMDocument object and set first-level DOM properties.
+    Dim x As DOMDocument60: Set x = MNew.DOMDocument60(False, , True)
+    
+    ' Configure DOM properties for namespace selection.
+    x.setProperty "SelectionLanguage", "XPath"
+    Dim ns As String: ns = "xmlns:x='urn:book'"
+    x.setProperty "SelectionNamespaces", ns
+    ' Load and validate the specified file into the DOM.
+    x.Load sXmlPathFileName
+    ' Return validation results in message to the user.
+    If x.parseError.errorCode <> 0 Then
+        s = "Validation failed on: " & sXmlPathFileName & vbCrLf & _
+            "===================== " & vbCrLf & _
+            "Reason: " & x.parseError.Reason & vbCrLf & _
+            "Source: " & x.parseError.srcText & vbCrLf & _
+            "Line  : " & x.parseError.Line & vbCrLf
+    Else
+        s = "Validation succeeded for: " & sXmlPathFileName & vbCrLf & _
+             "======================== " & vbCrLf & _
+             x.xml & vbCrLf
+    End If
+    ValidateFile_sl = s
+End Function
+'Output for 8.1.2:
+'Validation succeeded for sl-valid.xml
+'=====================================
+'<?xml version="1.0"?>
+'<catalog xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+'         xsi:schemaLocation='urn:book sl.xsd'>
+'   <x:book xmlns:x='urn:book' id="bk101">
+'      <x:author>Gambardella, Matthew</x:author>
+'      <x:title>XML Developer's Guide</x:title>
+'      <x:genre>Computer</x:genre>
+'      <x:price>44.95</x:price>
+'      <x:publish_date>2000-10-01</x:publish_date>
+'      <x:description>An in-depth look at creating applications with
+'      XML.</x:description>
+'   </x:book>
+'</catalog>
+'
+'Validation failed on sl-notValid.xml
+'====================================
+'Reason: Element '{urn:book}cost' is unexpected according to content model of parent element '{urn:book}book'.
+'Expecting: {urn:book}price.
+'
+'Source:       <x:cost>44.95</x:cost>
+'Line: 10
 
+' ############################## '        ' ############################## '
 Private Sub BtnTest813_Click()
-    '
+    Dim sPath As String: sPath = App.path & "\Xml\"
+    Dim s As String: s = ""
+    s = s & ValidateFile_sc(sPath & "sc-valid.xml", "urn:books", sPath & "sc.xsd")
+    s = s & ValidateFile_sc(sPath & "sc-notValid.xml", "urn:books", sPath & "sc.xsd")
+    Text1.Text = s
 End Sub
+Function ValidateFile_sc(sXmlPathFileName As String, sUrn As String, sXsdPathFileName As String) As String
+    Dim s As String
+    ' Create a schema cache and add books.xsd to it.
+    Dim xs As New MSXML2.XMLSchemaCache60: xs.Add sUrn, sXsdPathFileName
+    
+    ' Create an XML DOMDocument object.
+    Dim xd As New MSXML2.DOMDocument60
+    ' Assign the schema cache to the DOM document.
+    ' schemas collection.
+    Set xd.schemas = xs
+    ' Load books.xml as the DOM document.
+    xd.async = False
+    xd.Load sXmlPathFileName
+    
+    ' Return validation results in message to the user.
+    If xd.parseError.errorCode <> 0 Then
+        s = "Validation failed on: " & sXmlPathFileName & vbCrLf & _
+            "===================== " & vbCrLf & _
+            "Reason: " & xd.parseError.Reason & vbCrLf & _
+            "Source: " & xd.parseError.srcText & vbCrLf & _
+            "Line  : " & xd.parseError.Line & vbCrLf
+    Else
+         s = "Validation succeeded for: " & sXmlPathFileName & vbCrLf & _
+             "========================= " & vbCrLf & _
+             xd.xml & vbCrLf
+    End If
+    ValidateFile_sc = s
+End Function
+'Output:
+'Validation succeeded for sc-valid.xml
+'======================
+'<?xml version="1.0"?>
+'<x:catalog xmlns:x="urn:books">
+'        <book id="bk101">
+'                <author>Gambardella, Matthew</author>
+'                <title>XML Developer's Guide</title>
+'                <genre>Computer</genre>
+'                <price>44.95</price>
+'                <publish_date>2000-10-01</publish_date>
+'                <description>An in-depth look at creating applications
+'      with XML.</description>
+'        </book>
+'</x:catalog>
+'
+'Validation failed on sc-notValid.xml
+'=====================
+'Reason: Element 'cost' is unexpected according to content model of parent elemen
+'T 'book'.
+'Expecting: price.
+'
+'Source:       <cost>44.95</cost>
+'Line: 7
 
+' ############################## '        ' ############################## '
 Private Sub BtnTest814_Click()
-    '
+    Dim sPath As String: sPath = App.path & "\Xml\"
+    Dim sOutput As String
+    sOutput = ValidateFile_il(sPath & "il-valid.xml")
+    sOutput = sOutput & ValidateFile_il(sPath & "il-notValid.xml")
+    Text1.Text = sOutput
 End Sub
+Function ValidateFile_il(sXmlPathFileName As String) As String
+    Dim s As String
+    ' Create an XML DOMDocument object and set first-level DOM properties.
+    Dim x As DOMDocument60: Set x = MNew.DOMDocument60(False, , True)
+    ' Load and validate the specified file into the DOM.
+    x.setProperty "UseInlineSchema", True
+    x.Load sXmlPathFileName
+    
+    ' Return validation results in message to the user.
+    If x.parseError.errorCode <> 0 Then
+       s = "Validation failed on " & sXmlPathFileName & vbCrLf & _
+           "=====================" & vbCrLf & _
+           "Reason: " & x.parseError.Reason & vbCrLf & _
+           "Source: " & x.parseError.srcText & vbCrLf & _
+           "Line  : " & x.parseError.Line & vbCrLf
+    Else
+       s = "Validation succeeded for " & sXmlPathFileName & vbCrLf & _
+           "======================" & vbCrLf & _
+           x.xml & vbCrLf
+    End If
+    ValidateFile_il = s
+End Function
 
+' ############################## '        ' ############################## '
 Private Sub BtnTest82_Click()
     ' Output string:
     Dim strout As String
@@ -141,7 +362,7 @@ Private Sub BtnTest82_Click()
     strout = strout & "Validating DOM..." & vbNewLine
     Dim oError As IXMLDOMParseError: Set oError = oXMLDoc.Validate
     If oError.errorCode <> 0 Then
-        strout = strout & vbTab & "XMLDoc is not valid because " & vbNewLine & oError.reason & vbNewLine
+        strout = strout & vbTab & "XMLDoc is not valid because " & vbNewLine & oError.Reason & vbNewLine
     Else
         strout = strout & vbTab & "XMLDoc is validated:" & vbNewLine & oXMLDoc.xml & vbNewLine
     End If
@@ -159,7 +380,6 @@ Private Sub BtnTest82_Click()
     
     Text1.Text = strout
 End Sub
-
 Private Function ValidateNodes(oXMLDoc As DOMDocument60, oNodes As IXMLDOMNodeList) As String
     If oXMLDoc Is Nothing Then
         ValidateNodes = "Error in ValidateNodes(): Invalid oXMLDoc"
@@ -183,13 +403,12 @@ Private Function ValidateNodes(oXMLDoc As DOMDocument60, oNodes As IXMLDOMNodeLi
            If oError.errorCode = 0 Then
                strout = strout & vbTab & "<" & oNode.nodeName & "> (" & CStr(i) & ") is a valid node " & vbNewLine
            Else
-               strout = strout & vbTab & "<" & oNode.nodeName & "> (" & CStr(i) & ") " & "is not valid because" & vbNewLine & oError.reason & vbNewLine
+               strout = strout & vbTab & "<" & oNode.nodeName & "> (" & CStr(i) & ") " & "is not valid because" & vbNewLine & oError.Reason & vbNewLine
            End If
         End If
     Next
     ValidateNodes = strout
 End Function
-
 'Output 8.2
 'Validating DOM...
 '        XMLDoc is not valid because

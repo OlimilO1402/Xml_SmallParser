@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<catalog xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+         xsi:schemaLocation='urn:book il.xsd'>
+   <x:book 
+      xmlns:x='urn:book'
+      id="bk101">
+      <x:author>Gambardella, Matthew</x:author>
+      <x:title>XML Developer's Guide</x:title>
+      <x:genre>Computer</x:genre>
+      <x:price>44.95</x:price>
+      <x:publish_date>2000-10-01</x:publish_date>
+      <x:description>An in-depth look at creating applications with
+      XML.</x:description>
+   </x:book>
+</catalog>

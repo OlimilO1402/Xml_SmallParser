@@ -6,6 +6,7 @@ Form=Forms\FXMLOverHTTP.frm
 Module=MNew; Modules\MNew.bas
 Class=HttpRequestHandler; Classes\HttpRequestHandler.cls
 Form=Forms\FValidate.frm
+ResFile32="Resources\MyRes.res"
 Startup="FMain"
 ExeName32="MSXMLTutorial.exe"
 Command32=""
