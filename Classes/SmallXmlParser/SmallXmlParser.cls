@@ -33,11 +33,11 @@ Private Sub Class_Initialize()
     Line = 1
 End Sub
 Private Sub Class_Terminate()
-  Call Cleanup
+    Call Cleanup
 End Sub
 
 Private Function Error(ByVal msg As String) As SmallXmlParserException 'Exception
-  Set Error = New SmallXmlParserException:  Error.New_ msg, Line, Column
+    Set Error = New SmallXmlParserException:  Error.New_ msg, Line, Column
 End Function
 
 Private Function UnexpectedEndError() As SmallXmlParserException 'Exception
@@ -47,140 +47,138 @@ Private Function UnexpectedEndError() As SmallXmlParserException 'Exception
 End Function
 
 Private Function IsNameChar(c As Long, start As Boolean) As Boolean
-'Dim bc As Long
-  'bc = AscW(c)
-  Select Case c
-  Case 58, 95 'AscW(":"), AscW("_")
-    IsNameChar = True: Exit Function
-  Case 45, 46 'AscW("-"), AscW(".")
-    IsNameChar = Not start: Exit Function
-  End Select
-  If c > &H100 Then
+    'Dim bc As Long
+    'bc = AscW(c)
     Select Case c
-    Case &H559, &H6E5, &H6E6   ''\u0559'"?", '\u06E5'"?", '\u06E6'"?"
-      IsNameChar = True: Exit Function
+    Case 58, 95 'AscW(":"), AscW("_")
+        IsNameChar = True: Exit Function
+    Case 45, 46 'AscW("-"), AscW(".")
+        IsNameChar = Not start: Exit Function
     End Select
-    If (&H2BB <= c) And (c <= &H2C1) Then 'AscW("?")=63; AscW("i")=105
-      IsNameChar = True: Exit Function
+    If c > &H100 Then
+        Select Case c
+        Case &H559, &H6E5, &H6E6   ''\u0559'"?", '\u06E5'"?", '\u06E6'"?"
+            IsNameChar = True: Exit Function
+        End Select
+        If (&H2BB <= c) And (c <= &H2C1) Then 'AscW("?")=63; AscW("i")=105
+            IsNameChar = True: Exit Function
+        End If
     End If
-  End If
-  Select Case c
-  Case 97 To 122, 223, 228, 246, 252 'a..z,ß,ä,ö,ü LowercaseLetter
-    IsNameChar = True: Exit Function
-  Case 65 To 90, 196, 214, 220       'A..Z,  Ä,Ö,Ü UppercaseLetter
-    IsNameChar = True: Exit Function
-  Case 48 To 57                      '0...9,       DecimalDigitNumber
-    IsNameChar = Not start: Exit Function
-  Case 40, 41, 91, 93, 123, 125  ' (, ), [, ], {, } EnclosingMark
-    IsNameChar = Not start: Exit Function
-  Case Else
-    IsNameChar = False
-  End Select
-'  Select Case Char.GetUnicodeCategory(c)
-'    Case UnicodeCategory.LowercaseLetter, UnicodeCategory.UppercaseLetter, UnicodeCategory.OtherLetter, UnicodeCategory.TitlecaseLetter, UnicodeCategory.LetterNumber
-'      IsNameChar = True
-'    Case UnicodeCategory.SpacingCombiningMark, UnicodeCategory.EnclosingMark, UnicodeCategory.NonSpacingMark, UnicodeCategory.ModifierLetter, UnicodeCategory.DecimalDigitNumber
-'      IsNameChar = Not start
-'    Case Else
-'      IsNameChar = False
-'  End Select
+    Select Case c
+    Case 97 To 122, 223, 228, 246, 252 'a..z,ß,ä,ö,ü LowercaseLetter
+        IsNameChar = True: Exit Function
+    Case 65 To 90, 196, 214, 220       'A..Z,  Ä,Ö,Ü UppercaseLetter
+        IsNameChar = True: Exit Function
+    Case 48 To 57                      '0...9,       DecimalDigitNumber
+        IsNameChar = Not start: Exit Function
+    Case 40, 41, 91, 93, 123, 125  ' (, ), [, ], {, } EnclosingMark
+        IsNameChar = Not start: Exit Function
+    Case Else
+        IsNameChar = False
+    End Select
+    '  Select Case Char.GetUnicodeCategory(c)
+    '    Case UnicodeCategory.LowercaseLetter, UnicodeCategory.UppercaseLetter, UnicodeCategory.OtherLetter, UnicodeCategory.TitlecaseLetter, UnicodeCategory.LetterNumber
+    '      IsNameChar = True
+    '    Case UnicodeCategory.SpacingCombiningMark, UnicodeCategory.EnclosingMark, UnicodeCategory.NonSpacingMark, UnicodeCategory.ModifierLetter, UnicodeCategory.DecimalDigitNumber
+    '      IsNameChar = Not start
+    '    Case Else
+    '      IsNameChar = False
+    '  End Select
 End Function
 
 Private Function IsWhitespace(c As Long) As Boolean
-  Select Case c
-    Case 32, 13, 10, 9 'AscW(" "), AscW(vbCr), AscW(vbLF), AscW(vbTab)
-      IsWhitespace = True
-    Case Else
-      IsWhitespace = False
-  End Select
+    Select Case c 'AscW(" "), AscW(vbCr), AscW(vbLF), AscW(vbTab)
+    Case 32, 13, 10, 9: IsWhitespace = True
+    Case Else:          IsWhitespace = False
+    End Select
 End Function
 
 Private Sub HandleWhitespaces()
-  While IsWhitespace(Peek)
-    Call buffer.Append(ChrW$(Read))
-  Wend 'While
-  If (Peek <> 60) And (Peek >= 0) Then '"<"
-    mIsWhitespace = False
-  End If
+    While IsWhitespace(Peek)
+        Call buffer.Append(ChrW$(Read))
+    Wend 'While
+    If (Peek <> 60) And (Peek >= 0) Then '"<"
+        mIsWhitespace = False
+    End If
 End Sub
 
 Public Sub SkipWhitespaces(Optional expected As Boolean = False)
-  While True
-    Select Case Peek
-    Case 9, 10, 13, 32 'Chr$(9), Chr$(10), Chr$(13), " "
-      Read
-      If expected Then
-        expected = False
-      End If
-      ' continue
-    End Select
-    If expected Then
-      'Throw Error("Whitespace is expected.")
-      MsgBox "Error: Whitespace is expected."
-      Debug.Assert (False)
-    End If
-    Exit Sub 'Return
-  Wend 'While
+    While True
+        Select Case Peek
+        Case 9, 10, 13, 32 'Chr$(9), Chr$(10), Chr$(13), " "
+            Read
+            If expected Then
+                expected = False
+            End If
+            ' continue
+        End Select
+        If expected Then
+            'Throw Error("Whitespace is expected.")
+            MsgBox "Error: Whitespace is expected."
+            Debug.Assert (False)
+        End If
+        Exit Sub 'Return
+    Wend 'While
 End Sub
 
 Private Function Peek() As Long
-  Peek = reader.Peek
+    Peek = reader.Peek
 End Function
 
 Private Function Read() As Long
-Dim i As Long: i = reader.Read
-  If i = 10 Then 'Chr(10)
-    resetColumn = True
-  End If
-  If resetColumn Then
-    'Min(System.Threading.Interlocked.Increment(line),line-1)
-    Line = Line + 1
-    resetColumn = False
-    Column = 1
-  Else
-    'Min(System.Threading.Interlocked.Increment(column),column-1)
-    Column = Column + 1
-  End If
-  Read = i
+    Dim i As Long: i = reader.Read
+    If i = 10 Then 'Chr(10)
+        resetColumn = True
+    End If
+    If resetColumn Then
+        'Min(System.Threading.Interlocked.Increment(line),line-1)
+        Line = Line + 1
+        resetColumn = False
+        Column = 1
+    Else
+        'Min(System.Threading.Interlocked.Increment(column),column-1)
+        Column = Column + 1
+    End If
+    Read = i
 End Function
 
 Public Sub Expect(c As Long)
-Dim p As Long: p = Read 'ChrW$(62) = ">"
-  If p < 0 Then
-    'Throw UnexpectedEndError
-    MsgBox "Error: UnexpectedEndError"
-    Debug.Assert (False)
-  Else
-    If Not (p = c) Then
-      'Throw Error("Expected '" & Chr$(c) & "' but got " & Chr$(p))
-      MsgBox "Error: Expected '" & ChrW$(c) & "' but got " & ChrW$(p)
-      Debug.Assert (False)
+    Dim p As Long: p = Read 'ChrW$(62) = ">"
+    If p < 0 Then
+        'Throw UnexpectedEndError
+        MsgBox "Error: UnexpectedEndError"
+        Debug.Assert (False)
+    Else
+        If Not (p = c) Then
+            'Throw Error("Expected '" & Chr$(c) & "' but got " & Chr$(p))
+            MsgBox "Error: Expected '" & ChrW$(c) & "' but got " & ChrW$(p)
+            Debug.Assert (False)
+        End If
     End If
-  End If
 End Sub
 
 Private Function ReadUntil(cuntil As Long, handleReferences As Boolean) As String
-Dim c As Long
-'Dim ret As String
-  Do While True
-    If Peek < 0 Then
-      'Throw UnexpectedEndError
-      MsgBox "Error: UnexpectedEndError"
-      Debug.Assert (False)
-    End If
-    c = Read ', Char)
-    If c = cuntil Then
-      Exit Do ' break
-    ElseIf (handleReferences) And (c = 38) Then '"&"
-      ReadReference
-    Else
-      Call buffer.Append(ChrW$(c))
-    End If
-  Loop 'Wend 'End While
-  'ret = buffer.ToStr
-  ReadUntil = buffer.ToStr
-  buffer.Length = 0
-  'ReadUntil = ret
+    Dim c As Long
+    'Dim ret As String
+    Do While True
+        If Peek < 0 Then
+            'Throw UnexpectedEndError
+            MsgBox "Error: UnexpectedEndError"
+            Debug.Assert (False)
+        End If
+        c = Read ', Char)
+        If c = cuntil Then
+            Exit Do ' break
+        ElseIf (handleReferences) And (c = 38) Then '"&"
+            ReadReference
+        Else
+            Call buffer.Append(ChrW$(c))
+        End If
+    Loop 'Wend 'End While
+    'ret = buffer.ToStr
+    ReadUntil = buffer.ToStr
+    buffer.Length = 0
+    'ReadUntil = ret
 End Function
 
 Public Function ReadName() As String

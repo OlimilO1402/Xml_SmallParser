@@ -1,6 +1,6 @@
 VERSION 5.00
 Begin VB.Form Form1 
-   Caption         =   "Form1"
+   Caption         =   "SmallXmlParser"
    ClientHeight    =   8085
    ClientLeft      =   60
    ClientTop       =   450
@@ -58,19 +58,17 @@ Private Sub Form_Initialize()
 End Sub
 
 Private Sub Form_Load()
+    Me.Caption = "SmallXmlParser v" & App.Major & "." & App.Minor & "." & App.Revision
     Set SXP = New SmallXmlParser
 End Sub
 
 Private Sub BtnOpenFile_Click()
-    Dim aPath As String
-    Dim FS As FileStream
-    Dim SR As StreamReader
-    Dim DH As New DefaultHandler
-    aPath = GetXmlFile
+    Dim aPath As String: aPath = GetXmlFile
     If Len(aPath) > 0 Then
-        Set FS = MNew.FileStream(aPath) ', FileMode_Input, FileAccess_Read, FileShare_None)
-        Set SR = MNew.StreamReader(FS)
+        Dim FS As FileStream:   Set FS = MNew.FileStream(aPath) ', FileMode_Input, FileAccess_Read, FileShare_None)
+        Dim SR As StreamReader: Set SR = MNew.StreamReader(FS)
         DoEvents
+        Dim DH As New DefaultHandler
         Call SXP.Parse(SR, DH)
         Text1.text = DH.ToStr
     End If
@@ -87,11 +85,11 @@ Private Function GetXmlFile() As String
 End Function
 
 Private Sub Form_Resize()
-    Dim L As Single, T As Single, W As Single, H As Single
-    T = Text1.Top
+    Dim l As Single, t As Single, W As Single, H As Single
+    t = Text1.Top
     W = Me.ScaleWidth
-    H = Me.ScaleHeight - T
-    If W > 0 And H > 0 Then Text1.Move L, T, W, H
+    H = Me.ScaleHeight - t
+    If W > 0 And H > 0 Then Text1.Move l, t, W, H
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)

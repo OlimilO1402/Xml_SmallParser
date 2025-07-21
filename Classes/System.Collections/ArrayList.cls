@@ -16,20 +16,20 @@ Option Explicit
 Private mCol As Collection
 
 Private Sub Class_Initialize()
-  Call Clear
+    Set mCol = New Collection
 End Sub
 'hier könnte es auch Get Item as String heißen
 Public Property Get Item(Index_Name As Variant) As Variant
 Attribute Item.VB_UserMemId = 0
-  If TypeOf mCol.Item(Index_Name) Is Object  Then
-    Set Item = mCol.Item(Index_Name)
-  Else
-    Item = mCol.Item(Index_Name)
-  End If
+    If TypeOf mCol.Item(Index_Name) Is Object  Then
+        Set Item = mCol.Item(Index_Name)
+    Else
+        Item = mCol.Item(Index_Name)
+    End If
 End Property
 
 Public Sub Clear()
-  Set mCol = New Collection
+    Class_Initialize
 End Sub
 
 'Public Function GetEnumerator() As IUnknown
@@ -37,13 +37,13 @@ End Sub
 'End Function
 
 Public Property Get Count() As Long
-  Count = mCol.Count
+    Count = mCol.Count
 End Property
 
 Public Function ToArray() As Collection 'Variant
-'ReDim AArr(mCol.Count)
-'Dim i As Long
-  Set ToArray = mCol 'Array(mCol)
+    'ReDim AArr(mCol.Count)
+    'Dim i As Long
+    Set ToArray = mCol 'Array(mCol)
 End Function
 
 Public Function ToStr() As String
@@ -62,5 +62,5 @@ End Function
 'End Sub
 
 Public Sub Add(StrValue As String)
-  mCol.Add StrValue
+    mCol.Add StrValue
 End Sub
